@@ -2,27 +2,42 @@ package com.example.demo.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.oauth2.jwt.JwtDecoder
+import org.springframework.security.config.annotation.web.invoke // Ensure this import is present
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 class SecurityConfig {
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http {
-            authorizeHttpRequests {
-                authorize("/api/v1/user/register", permitAll)
-                authorize("/swagger-ui/**", permitAll)
-                authorize("/v3/api-docs/**", permitAll)
-                authorize("/api/v1/auth/user/login", permitAll)
-                authorize(anyRequest, authenticated)
+    fun securityFilterChain(
+        http: HttpSecurity,
+        jwtDecoder: JwtDecoder,
+        jwtConverterConfig: JWTConverterConfig
+    ): SecurityFilterChain {
+
+        http
+            .authorizeHttpRequests { authz ->
+                authz
+                    .requestMatchers("/api/v1/user/register", "api/v1/auth/user/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                    .anyRequest().authenticated()
             }
-            csrf { disable() }                          // Tắt CSRF
+
+        http.csrf { csrf -> csrf.disable() }
+
+        http.oauth2ResourceServer { oauth2 ->
+            oauth2.jwt { jwt ->
+                jwt.decoder(jwtDecoder)
+                jwt.jwtAuthenticationConverter(jwtConverterConfig.jwtAuthenticationConverter())
+            }
         }
-        return http.build() // <- Dòng này fix lỗi bạn gặp
+
+        return http.build()
     }
+
 }
