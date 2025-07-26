@@ -18,6 +18,7 @@ class SecurityConfig {
                 authorize("/api/v1/user/register", permitAll)
                 authorize("/swagger-ui/**", permitAll)
                 authorize("/v3/api-docs/**", permitAll)
+                authorize("/api/v1/auth/user/login", permitAll)
                 authorize(anyRequest, authenticated)
             }
             csrf { disable() }                          // Tắt CSRF

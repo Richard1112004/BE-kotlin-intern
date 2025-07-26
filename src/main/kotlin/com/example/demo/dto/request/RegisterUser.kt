@@ -1,6 +1,6 @@
 package com.example.demo.dto.request
 
-data class register(
+data class RegisterUser(
     var email: String,
     var password: String,
     var phone: String

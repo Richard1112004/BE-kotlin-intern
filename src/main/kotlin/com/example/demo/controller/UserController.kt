@@ -1,6 +1,6 @@
 package com.example.demo.controller
 
-import com.example.demo.dto.request.register
+import com.example.demo.dto.request.RegisterUser
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.service.UserService
 import io.swagger.v3.oas.annotations.Operation
@@ -28,22 +28,20 @@ class UserController (
         ]
     )
     @PostMapping("/register")
-    fun postUser(@RequestBody req: register): ResponseEntity<APIRespond<Void>> {
+    fun postUser(@RequestBody req: RegisterUser): ResponseEntity<APIRespond<Void>> {
         try {
             userService.postUser(req)
             return ResponseEntity.ok(
-                APIRespond<Void>(
+                APIRespond(
                     status = 200,
-                    data = null,
                     message = "register successful"
                 ) //test
             )
         } catch (e: Exception) {
             return ResponseEntity.status(401).body(
-                APIRespond<Void>(
+                APIRespond(
                     status = 401,
-                    data = null,
-                    message = e.message ?: "Unauthorized"
+                    message = "register failed: ${e.message ?: "Unknown error"}"
                 )
             )
         }

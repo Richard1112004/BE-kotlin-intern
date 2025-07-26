@@ -13,7 +13,7 @@ class JWTCreateToken(
     @Value("\${jwt.expirationtime}") private val expiration: Long
 ) {
 
-    fun createJWT(id: String, subject: String, role: String, ttlMillis: Long): String {
+    fun createJWT(id: String, email: String, role: String, ttlMillis: Long): String {
         val nowMillis = System.currentTimeMillis()
         val now = Date(nowMillis)
         val signatureAlgorithm = SignatureAlgorithm.HS256
@@ -24,7 +24,7 @@ class JWTCreateToken(
         val builder = Jwts.builder()
             .setId(id)
             .setIssuedAt(now)
-            .setSubject(subject)
+            .setSubject(email)
             .claim("scope", role)
             .signWith(signingKey, signatureAlgorithm)
 

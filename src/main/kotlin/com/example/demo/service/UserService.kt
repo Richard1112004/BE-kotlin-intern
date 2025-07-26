@@ -1,6 +1,6 @@
 package com.example.demo.service
 
-import com.example.demo.dto.request.register
+import com.example.demo.dto.request.RegisterUser
 import com.example.demo.model.UserModel
 import com.example.demo.repository.UserRepo
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -12,7 +12,7 @@ class UserService(
     private val userRepo: UserRepo,
     private val passwordEncoder: PasswordEncoder,
 ) {
-    fun postUser(req: register) : UserModel {
+    fun postUser(req: RegisterUser) : UserModel {
         val userModel = UserModel(
             password = passwordEncoder.encode(req.password),
             email = req.email,
