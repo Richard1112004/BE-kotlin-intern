@@ -15,8 +15,10 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
-                authorize("/api/user", permitAll)       // Cho phép truy cập không xác thực
-                authorize(anyRequest, authenticated)    // Các đường dẫn khác yêu cầu login
+                authorize("/api/v1/user/register", permitAll)
+                authorize("/swagger-ui/**", permitAll)
+                authorize("/v3/api-docs/**", permitAll)
+                authorize(anyRequest, authenticated)
             }
             csrf { disable() }                          // Tắt CSRF
         }

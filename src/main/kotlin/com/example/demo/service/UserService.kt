@@ -1,6 +1,6 @@
 package com.example.demo.service
 
-import com.example.demo.dto.request.login
+import com.example.demo.dto.request.register
 import com.example.demo.model.UserModel
 import com.example.demo.repository.UserRepo
 import org.springframework.stereotype.Service
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 class UserService(
     private val userRepo: UserRepo
 ) {
-    fun postUser(req: login) : UserModel {
+    fun postUser(req: register) : UserModel {
         val userModel = UserModel(
             password = req.password,
             email = req.email,
