@@ -24,7 +24,7 @@ class UserController (
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully registered user"),
-            ApiResponse(responseCode = "401", description = "Unauthorized")
+            ApiResponse(responseCode = "400", description = "Bad Request"),
         ]
     )
     @PostMapping("/register")
@@ -38,9 +38,9 @@ class UserController (
                 ) //test
             )
         } catch (e: Exception) {
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(400).body(
                 APIRespond(
-                    status = 401,
+                    status = 400,
                     message = "register failed: ${e.message ?: "Unknown error"}"
                 )
             )

@@ -23,7 +23,7 @@ class AdminController (
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully registered admin"),
-            ApiResponse(responseCode = "401", description = "Unauthorized")
+            ApiResponse(responseCode = "400", description = "Bad request"),
         ]
     )
     @PostMapping("/register")
@@ -37,9 +37,9 @@ class AdminController (
                  )
              )
         } catch (e: Exception) {
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(400).body(
                 APIRespond(
-                    status = 401,
+                    status = 400,
                     message = "Admin registration failed: ${e.message ?: "Unknown error"}"
                 )
             )
