@@ -22,7 +22,7 @@ class AuthController (
     @ApiResponses(
         value = [
             io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "User logged in successfully"),
-            io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+            io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request")
         ]
     )
     @PostMapping("user/login")
@@ -36,9 +36,9 @@ class AuthController (
                 )
             )
         } catch (e: Exception) {
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(400).body(
                 APIRespond<String>(
-                    status = 401,
+                    status = 400,
                     data = null,
                     message = "An error occurred during login: ${e.message}"
                 )
@@ -50,7 +50,7 @@ class AuthController (
     @ApiResponses(
         value = [
             io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Admin logged in successfully"),
-            io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
+            io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request")
         ]
     )
     @PostMapping("admin/login")
@@ -65,9 +65,9 @@ class AuthController (
                 )
             )
         } catch (e: Exception) {
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(400).body(
                 APIRespond<String>(
-                    status = 401,
+                    status = 400,
                     data = null,
                     message = "An error occurred during admin login: ${e.message}"
                 )
