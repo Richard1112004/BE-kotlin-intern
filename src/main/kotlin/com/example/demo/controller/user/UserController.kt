@@ -1,8 +1,8 @@
-package com.example.demo.controller
+package com.example.demo.controller.user
 
 import com.example.demo.dto.request.RegisterUser
 import com.example.demo.dto.respond.APIRespond
-import com.example.demo.service.UserService
+import com.example.demo.service.user.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses

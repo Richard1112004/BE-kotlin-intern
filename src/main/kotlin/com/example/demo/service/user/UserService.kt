@@ -1,8 +1,8 @@
-package com.example.demo.service
+package com.example.demo.service.user
 
 import com.example.demo.dto.request.RegisterUser
-import com.example.demo.model.UserModel
-import com.example.demo.repository.UserRepo
+import com.example.demo.model.user.UserModel
+import com.example.demo.repository.user.UserRepo
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 

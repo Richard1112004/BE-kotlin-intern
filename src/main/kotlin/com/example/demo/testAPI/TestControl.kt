@@ -1,4 +1,4 @@
-package com.example.demo
+package com.example.demo.testAPI
 
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-class HelloController {
+class TestAPI {
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/hello")
+    @GetMapping("/user")
     fun hello(): ResponseEntity<String> {
-        return ResponseEntity.ok("Hello, secured endpoint works!")
+        return ResponseEntity.ok("Hello, user API works!")
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/test")
+    @GetMapping("/admin")
     fun test(): ResponseEntity<String> {
-        return ResponseEntity.ok("Test endpoint works!")
+        return ResponseEntity.ok("Hello, admin API works!")
     }
 }

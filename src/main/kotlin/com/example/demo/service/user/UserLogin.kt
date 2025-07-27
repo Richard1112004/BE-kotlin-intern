@@ -1,9 +1,9 @@
-package com.example.demo.service
+package com.example.demo.service.user
 
 import com.example.demo.component.JWTCreateToken
 import com.example.demo.component.JWTPasswordAuth
-import com.example.demo.dto.request.LoginUser
-import com.example.demo.repository.UserRepo
+import com.example.demo.dto.request.LoginDTO
+import com.example.demo.repository.user.UserRepo
 import org.springframework.stereotype.Component
 
 
@@ -13,10 +13,10 @@ class UserLogin (
     private val jwtPasswordAuth: JWTPasswordAuth,
     private val jwtCreateToken: JWTCreateToken
 ) {
-    fun login(req: LoginUser) : String{
+    fun login(req: LoginDTO) : String{
         val user = userRepo.findByEmail(req.email) ?: throw Exception("User not found")
         jwtPasswordAuth.verifyOrThrow(req.password,
-            user
+            user.password!!
         )
         return jwtCreateToken.createJWT(
             user.id.toString(),
