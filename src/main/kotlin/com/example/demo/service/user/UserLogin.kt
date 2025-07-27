@@ -3,6 +3,7 @@ package com.example.demo.service.user
 import com.example.demo.component.JWTCreateToken
 import com.example.demo.component.JWTPasswordAuth
 import com.example.demo.dto.request.LoginDTO
+import com.example.demo.`interface`.UserLoginStrategy
 import com.example.demo.repository.user.UserRepo
 import org.springframework.stereotype.Component
 
@@ -12,8 +13,8 @@ class UserLogin (
     private val userRepo: UserRepo,
     private val jwtPasswordAuth: JWTPasswordAuth,
     private val jwtCreateToken: JWTCreateToken
-) {
-    fun login(req: LoginDTO) : String{
+) : UserLoginStrategy {
+    override fun login(req: LoginDTO) : String{
         val user = userRepo.findByEmail(req.email) ?: throw Exception("User not found")
         jwtPasswordAuth.verifyOrThrow(req.password,
             user.password!!

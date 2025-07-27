@@ -3,6 +3,7 @@ package com.example.demo.controller.auth
 import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.service.admin.AdminLogin
+import com.example.demo.service.auth.AuthService
 import com.example.demo.service.user.UserLogin
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("api/v1/auth")
 class AuthController (
-    private val userLogin: UserLogin,
-    private val adminLogin: AdminLogin,
+    private val authService: AuthService,
     ) {
     @Operation(summary = "Login user")
     @ApiResponses(
@@ -31,7 +31,7 @@ class AuthController (
             return ResponseEntity.ok(
                 APIRespond<String>(
                     status = 200,
-                    data = userLogin.login(req),
+                    data = authService.login("user_login",req),
                     message = "User logged in successfully"
                 )
             )
@@ -60,7 +60,7 @@ class AuthController (
             return ResponseEntity.ok(
                 APIRespond<String>(
                     status = 200,
-                    data = adminLogin.login(req), // Replace with actual admin login logic
+                    data = authService.login("admin_login",req), // Replace with actual admin login logic
                     message = "Admin logged in successfully"
                 )
             )
