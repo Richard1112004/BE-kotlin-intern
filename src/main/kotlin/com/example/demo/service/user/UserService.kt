@@ -1,5 +1,6 @@
 package com.example.demo.service.user
 
+import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.request.RegisterUser
 import com.example.demo.model.user.UserModel
 import com.example.demo.repository.user.UserRepo
@@ -20,5 +21,12 @@ class UserService(
             role = "USER",
         )
         return userRepo.save(userModel)
+    }
+    fun putPassword(req: LoginDTO): UserModel {
+        val user = userRepo.findByEmail(req.email)
+            ?: throw IllegalArgumentException("User not found with email: ${req.email}")
+
+        user.password = passwordEncoder.encode(req.password)
+        return userRepo.save(user)
     }
 }
