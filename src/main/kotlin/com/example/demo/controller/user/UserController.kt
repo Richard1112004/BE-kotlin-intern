@@ -1,5 +1,6 @@
 package com.example.demo.controller.user
 
+import com.example.demo.dto.request.GGSignInReq
 import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.request.RegisterUser
 import com.example.demo.dto.respond.APIRespond
@@ -73,6 +74,38 @@ class UserController (
                 APIRespond(
                     status = 400,
                     message = "password update failed: ${e.message ?: "Unknown error"}"
+                )
+            )
+        }
+    }
+
+
+    @Operation(summary = "Sign in with Google")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successfully signed in with Google"),
+            ApiResponse(responseCode = "400", description = "Bad Request"),
+        ]
+    )
+    @PostMapping("/google")
+    fun signInWithGoogle(
+        @RequestBody req: GGSignInReq
+    ): ResponseEntity<APIRespond<String>> {
+
+        try {
+            return ResponseEntity.ok(
+                APIRespond<String>(
+                    status = 200,
+                    data = userService.signInWithGoogle(req.idToken),
+                    message = "Sign in with Google successful"
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Sign in with Google failed: ${e.message ?:  e::class.java.simpleName}"
                 )
             )
         }

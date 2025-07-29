@@ -27,6 +27,7 @@ class SecurityConfig {
                     .requestMatchers(
                         "/api/v1/user/register",
                         "/api/v1/admin/register",
+                        "/api/v1/user/google",
                         "/api/v1/user/password",
                         "/api/v1/auth/user/login",
                         "/api/v1/auth/admin/login",
