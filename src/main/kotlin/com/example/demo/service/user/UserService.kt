@@ -1,6 +1,7 @@
 package com.example.demo.service.user
 
 import com.example.demo.component.JWTCreateToken
+import com.example.demo.dto.request.FireBaseUserDTO
 import com.example.demo.dto.request.GGSignInReq
 import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.request.RegisterUser
@@ -10,6 +11,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.firebase.auth.FirebaseAuth
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -60,6 +62,24 @@ class UserService(
         return jwtCreateToken.createJWT(
             user.id.toString(),
             user.email!!,
+            "USER",
+            3600000 // 1 hour
+        )
+    }
+
+    fun verifyIdTokenEmail(req: FireBaseUserDTO): String {
+        val decodedToken = FirebaseAuth.getInstance().verifyIdToken(req.idToken)
+        val userModel = UserModel(
+            email = decodedToken.email ?: throw IllegalArgumentException("Email not found in token"),
+            name = decodedToken.name,
+            phone = req.phone,
+            password = passwordEncoder.encode(req.password),
+            role = "USER"
+        )
+        userRepo.save(userModel)
+        return jwtCreateToken.createJWT(
+            decodedToken.uid,
+            decodedToken.email ?: throw IllegalArgumentException("Email not found in token"),
             "USER",
             3600000 // 1 hour
         )

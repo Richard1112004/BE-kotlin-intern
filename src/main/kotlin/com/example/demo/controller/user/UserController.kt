@@ -1,5 +1,6 @@
 package com.example.demo.controller.user
 
+import com.example.demo.dto.request.FireBaseUserDTO
 import com.example.demo.dto.request.GGSignInReq
 import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.request.RegisterUser
@@ -22,34 +23,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserController (
     private val userService: UserService
 ) {
-    @Operation(summary = "Register users")
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Successfully registered user"),
-            ApiResponse(responseCode = "400", description = "Bad Request"),
-        ]
-    )
-    @PostMapping("/register")
-    fun postUser(@RequestBody req: RegisterUser): ResponseEntity<APIRespond<Void>> {
-        try {
-            userService.postUser(req)
-            return ResponseEntity.ok(
-                APIRespond(
-                    status = 200,
-                    message = "register successful"
-                ) //test
-            )
-        } catch (e: Exception) {
-            return ResponseEntity.status(400).body(
-                APIRespond(
-                    status = 400,
-                    message = "register failed: ${e.message ?: "Unknown error"}"
-                )
-            )
-        }
-    }
-
-
     @Operation(summary  = "Edit password")
     @ApiResponses(
         value = [
@@ -106,6 +79,36 @@ class UserController (
                 APIRespond(
                     status = 400,
                     message = "Sign in with Google failed: ${e.message ?:  e::class.java.simpleName}"
+                )
+            )
+        }
+    }
+
+    @Operation(summary = "Register with Firebase")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successfully register with Firebase"),
+            ApiResponse(responseCode = "400", description = "Bad Request"),
+        ]
+    )
+    @PostMapping("/firebase")
+    fun signInWithFirebase(
+        @RequestBody req: FireBaseUserDTO
+    ): ResponseEntity<APIRespond<String>> {
+        try {
+            return ResponseEntity.ok(
+                APIRespond<String>(
+                    status = 200,
+                    data = userService.verifyIdTokenEmail(req),
+                    message = "Register with Firebase successful"
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Register with Firebase failed: ${e.message ?: e::class.java.simpleName}"
                 )
             )
         }
