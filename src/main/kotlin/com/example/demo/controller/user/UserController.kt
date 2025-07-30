@@ -6,9 +6,11 @@ import com.example.demo.dto.request.LoginDTO
 import com.example.demo.dto.request.RegisterUser
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.service.user.UserService
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,10 +22,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/v1/user")
 @RestController
+@Tag(name = "User", description = "API for user operations")
 class UserController (
     private val userService: UserService
 ) {
-    @Operation(summary  = "Edit password")
+    @Operation(summary  = "Edit password",
+        description = "This endpoint allows users to change their password. " +
+                "The request body should contain the new password in the 'password' field."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully edited password"),
@@ -53,7 +59,11 @@ class UserController (
     }
 
 
-    @Operation(summary = "Sign in with Google")
+    @Operation(summary = "Sign in with Google",
+        description = "This endpoint allows users to sign in using their Google account.\n" +
+                "The request body should contain the Google ID token get from Google.\n" +
+        "We will return JWT token if the sign in is successful.\n"
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully signed in with Google"),
@@ -84,7 +94,11 @@ class UserController (
         }
     }
 
-    @Operation(summary = "Register with Firebase")
+    @Operation(summary = "Register with Firebase",
+        description = "This endpoint allows users to register using Firebase. " +
+                "The request body should contain the Firebase ID token get from Firebase, phone number, and password."+
+        "We will return JWT token if the registration is successful."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully register with Firebase"),
