@@ -17,12 +17,12 @@ class UserLogin (
     override fun login(req: LoginDTO) : String{
         val user = userRepo.findByEmail(req.email) ?: throw Exception("User not found")
         jwtPasswordAuth.verifyOrThrow(req.password,
-            user.password!!
+            user.password
         )
         return jwtCreateToken.createJWT(
             user.id.toString(),
-            user.email!!,
-            user.role!!,
+            user.email,
+            "USER",
             3600000,
         )
     }

@@ -30,6 +30,8 @@ class SecurityConfig {
                         "/api/v1/user/google",
                         "/api/v1/user/firebase",
                         "/api/v1/user/password",
+                        "/api/v1/user/check-email",
+                        "api/v1/admin/register",
                         "/api/v1/auth/user/login",
                         "/api/v1/auth/admin/login",
                         "/swagger-ui/**",

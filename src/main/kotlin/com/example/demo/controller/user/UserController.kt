@@ -1,9 +1,6 @@
 package com.example.demo.controller.user
 
-import com.example.demo.dto.request.FireBaseUserDTO
-import com.example.demo.dto.request.GGSignInReq
-import com.example.demo.dto.request.LoginDTO
-import com.example.demo.dto.request.RegisterUser
+import com.example.demo.dto.request.*
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.service.user.UserService
 import io.swagger.v3.oas.annotations.media.Schema
@@ -26,9 +23,41 @@ import org.springframework.web.bind.annotation.RestController
 class UserController (
     private val userService: UserService
 ) {
+    @Operation(summary = "Check email availability",
+        description = ("This endpoint checks if the provided email is available for registration. " +
+                "If the email is already taken, it will return an error message.")
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Email is available"),
+            ApiResponse(responseCode = "400", description = "Email is already taken")
+        ]
+    )
+    @PostMapping("/check-email")
+    fun FindByEmail(@RequestBody req: EmailDTO) : ResponseEntity<APIRespond<Void>>{
+        try{
+            userService.FindByEmail(req.email)
+            return ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    message = "Email is available"
+                )
+            )
+        } catch (e: Exception) {
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Email is already taken: ${e.message ?: "Unknown error"}"
+                )
+            )
+        }
+    }
+
+
     @Operation(summary  = "Edit password",
         description = "This endpoint allows users to change their password. " +
-                "The request body should contain the new password in the 'password' field."
+                "The request body should contain the JWT token, new password" +
+                "We will return a success message if the password is updated successfully."
     )
     @ApiResponses(
         value = [
@@ -38,7 +67,7 @@ class UserController (
     )
     @PutMapping("/password")
     fun putPassword(
-        @RequestBody req: LoginDTO
+        @RequestBody req: ResetPasswordDTO
     ): ResponseEntity<APIRespond<Void>> {
         try {
             userService.putPassword(req)

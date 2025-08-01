@@ -4,23 +4,23 @@ import com.example.demo.component.JWTCreateToken
 import com.example.demo.component.JWTPasswordAuth
 import com.example.demo.dto.request.LoginDTO
 import com.example.demo.`interface`.UserLoginStrategy
-import com.example.demo.repository.admin.AdminRepo
+import com.example.demo.repository.user.UserRepo
 import org.springframework.stereotype.Component
 
 
 @Component("admin_login")
-class AdminLogin (
-    private val adminRepo: AdminRepo,
+class AdminLogin(
     private val jwtPasswordAuth: JWTPasswordAuth,
-    private val jwtCreateToken: JWTCreateToken
+    private val jwtCreateToken: JWTCreateToken,
+    private val userRepo: UserRepo
 ) :UserLoginStrategy {
 
     override fun login(req: LoginDTO): String {
-        val admin = adminRepo.findByEmail(req.email) ?: throw Exception("Admin not found")
-        jwtPasswordAuth.verifyOrThrow(req.password, admin.password!!)
+        val admin = userRepo.findByEmail(req.email) ?: throw Exception("Admin not found")
+        jwtPasswordAuth.verifyOrThrow(req.password, admin.password)
         return jwtCreateToken.createJWT(
             admin.id.toString(),
-            admin.email!!,
+            admin.email,
             "ADMIN",
             3600000,
         )

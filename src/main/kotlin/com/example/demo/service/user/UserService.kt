@@ -1,43 +1,58 @@
 package com.example.demo.service.user
 
 import com.example.demo.component.JWTCreateToken
-import com.example.demo.dto.request.FireBaseUserDTO
-import com.example.demo.dto.request.GGSignInReq
-import com.example.demo.dto.request.LoginDTO
-import com.example.demo.dto.request.RegisterUser
-import com.example.demo.model.user.UserModel
+import com.example.demo.dto.request.*
 import com.example.demo.repository.user.UserRepo
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.example.demo.model.UserModel
+import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.stereotype.Service
+import org.springframework.security.oauth2.jwt.Jwt
+
 
 
 @Service
 class UserService(
     private val userRepo: UserRepo,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtCreateToken: JWTCreateToken
+    private val jwtCreateToken: JWTCreateToken,
+    private val jwtDecoder: JwtDecoder
 ) {
     fun postUser(req: RegisterUser) : UserModel {
         val userModel = UserModel(
             password = passwordEncoder.encode(req.password),
             email = req.email,
             phone = req.phone,
-            role = "USER",
         )
         return userRepo.save(userModel)
     }
-    fun putPassword(req: LoginDTO): UserModel {
-        val user = userRepo.findByEmail(req.email)
-            ?: throw IllegalArgumentException("User not found with email: ${req.email}")
-
-        user.password = passwordEncoder.encode(req.password)
-        return userRepo.save(user)
+    fun FindByEmail(email: String): UserModel {
+        return userRepo.findByEmail(email) ?: throw IllegalArgumentException("User not found with email: $email")
     }
+    fun putPassword(req: ResetPasswordDTO) {
+        val decodedJwt: Jwt = jwtDecoder.decode(req.token)
+
+        val scope = decodedJwt.claims["scope"]?.toString()
+        if (scope != "RESET-PASSWORD") {
+            throw IllegalArgumentException("Invalid token scope")
+        }
+
+        val email = decodedJwt.subject
+        val encodedPassword = passwordEncoder.encode(req.newPassword)
+
+        val user = userRepo.findByEmail(email)
+            ?: throw IllegalArgumentException("User not found")
+        user.password = encodedPassword
+        userRepo.save(user)
+        return
+    }
+
+
     private val verifier: GoogleIdTokenVerifier = GoogleIdTokenVerifier.Builder(
         NetHttpTransport(),
         JacksonFactory.getDefaultInstance()
@@ -54,14 +69,13 @@ class UserService(
         val user = userRepo.findByEmail(email) ?: run {
             val userModel = UserModel(
                 email = email,
-                name = payload["name"] as String?,
-                role = "USER",
+                name = payload["name"] as String,
             )
             userRepo.save(userModel)
         }
         return jwtCreateToken.createJWT(
             user.id.toString(),
-            user.email!!,
+            user.email,
             "USER",
             3600000 // 1 hour
         )
@@ -71,10 +85,8 @@ class UserService(
         val decodedToken = FirebaseAuth.getInstance().verifyIdToken(req.idToken)
         val userModel = UserModel(
             email = decodedToken.email ?: throw IllegalArgumentException("Email not found in token"),
-            name = decodedToken.name,
-            phone = req.phone,
+            phone = req.phone ?: "",
             password = passwordEncoder.encode(req.password),
-            role = "USER"
         )
         userRepo.save(userModel)
         return jwtCreateToken.createJWT(
