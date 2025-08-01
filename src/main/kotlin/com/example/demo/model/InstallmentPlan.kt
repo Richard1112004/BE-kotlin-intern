@@ -13,8 +13,8 @@ data class InstallmentPlan (
     val id: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
-    val order: OrderModel ?= null,
+    @JoinColumn(name = "cart_item_id", nullable = false)
+    val cartItem: CartItem ?= null,
 
     @Column(nullable = true)
     val totalMonth: Int = 0,

@@ -26,5 +26,8 @@ data class CartItem (
     val quantity: Int = 1,
 
     @Column(nullable = true)
-    val term : Long = 0
+    val term : Long = 0,
+
+    @Column(nullable = true)
+    val isClear: Boolean = false,
 )

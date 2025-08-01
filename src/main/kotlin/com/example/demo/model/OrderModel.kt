@@ -16,9 +16,6 @@ data class OrderModel (
     @JoinColumn(name = "user_id", nullable = false)
     val user: UserModel? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    val product: ProductModel? = null,
 
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
@@ -30,8 +27,6 @@ data class OrderModel (
     @Column(nullable = false)
     val status: Status = Status.PENDING,
 
-    @Column(nullable = false)
-    val image : String = "",
 )
 
 enum class Status {
