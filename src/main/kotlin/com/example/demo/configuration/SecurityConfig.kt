@@ -25,6 +25,7 @@ class SecurityConfig {
             .authorizeHttpRequests { authz ->
                 authz
                     .requestMatchers(
+                        "api/v1/product/**",
                         "/api/v1/user/register",
                         "/api/v1/admin/register",
                         "/api/v1/user/google",
