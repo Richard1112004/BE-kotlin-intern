@@ -4,14 +4,12 @@ import com.example.demo.dto.request.order.OrderDTO
 import com.example.demo.model.OrderModel
 import com.example.demo.repository.orders.OrderRepo
 import com.example.demo.repository.user.UserRepo
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.stereotype.Service
 
 
 @Service
 class OrderService (
     private val orderRepo: OrderRepo,
-    private val jwtDecoder: JwtDecoder,
     private val userRepo: UserRepo
 ) {
     fun getAllOrders(): List<OrderModel> {

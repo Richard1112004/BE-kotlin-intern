@@ -2,19 +2,26 @@ package com.example.demo.controller.cartItem
 
 import com.example.demo.dto.request.cartItem.CartItemDTO
 import com.example.demo.dto.respond.APIRespond
+import com.example.demo.service.cartItem.CartItemService
+import com.example.demo.service.user.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
 @RequestMapping("/api/v1/cart-item")
 @RestController
 @Tag(name = "Cart-Item", description = "API for cart item operations")
-class CartItemController {
+class CartItemController(
+    private val cartItemService: CartItemService,
+    private val userService: UserService
+) {
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Post new cart items")
     @ApiResponses(
         value = [
@@ -25,7 +32,7 @@ class CartItemController {
     @PostMapping
     fun postCartItem(@RequestBody req: CartItemDTO): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate adding a cart item
+            cartItemService.addCartItem(req)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
@@ -42,6 +49,7 @@ class CartItemController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Update cart items")
     @ApiResponses(
         value = [
@@ -49,10 +57,10 @@ class CartItemController {
             ApiResponse(responseCode = "400", description = "Bad request"),
         ]
     )
-    @PutMapping
-    fun updateCartItem(@RequestBody req: CartItemDTO): ResponseEntity<APIRespond<Void>> {
+    @PutMapping("{id}")
+    fun updateCartItem(@RequestBody req: CartItemDTO, @PathVariable id: Long): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate updating a cart item
+            cartItemService.updateCartItem(req, id)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
@@ -69,6 +77,7 @@ class CartItemController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Delete cart items")
     @ApiResponses(
         value = [
@@ -77,9 +86,9 @@ class CartItemController {
         ]
     )
     @DeleteMapping("/{id}")
-    fun deleteCartItem(@PathVariable id: Int): ResponseEntity<APIRespond<Void>> {
+    fun deleteCartItem(@PathVariable id: Long): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate deleting a cart item
+            cartItemService.deleteCartItem(id)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
@@ -96,6 +105,7 @@ class CartItemController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all cart items")
     @ApiResponses(
         value = [
@@ -106,7 +116,7 @@ class CartItemController {
     @GetMapping("/all")
     fun getAllCartItems(): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate fetching all cart items
+            cartItemService.getAllCartItems()
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
