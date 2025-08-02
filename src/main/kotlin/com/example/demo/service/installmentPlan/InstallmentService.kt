@@ -23,13 +23,13 @@ class InstallmentService (
 
     fun addInstallmentPlan(installmentPlan: InstallmentPlanDTO): InstallmentPlan {
         val newInstallmentPlan = InstallmentPlan(
-            cartItem = cartItemRepo.findById(installmentPlan.cartItemId).orElseThrow({IllegalArgumentException("Cart item not found with id: ${installmentPlan.cartItemId}")}),
-            totalMonth = installmentPlan.totalMonth,
-            installmentAmount = installmentPlan.installmentAmount,
-            lateFee = installmentPlan.lateFee,
-            status = installmentPlan.status,
-            startDate = installmentPlan.startDate,
-            endDate = installmentPlan.endDate,
+            cartItem = cartItemRepo.findById(installmentPlan.cartItemId!!).orElseThrow({IllegalArgumentException("Cart item not found with id: ${installmentPlan.cartItemId}")}),
+            totalMonth = installmentPlan.totalMonth!!,
+            installmentAmount = installmentPlan.installmentAmount!!,
+            lateFee = installmentPlan.lateFee!!,
+            status = installmentPlan.status!!,
+            startDate = installmentPlan.startDate!!,
+            endDate = installmentPlan.endDate!!,
             )
         return installmentPlanRepo.save(newInstallmentPlan)
     }

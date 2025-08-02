@@ -3,11 +3,11 @@ package com.example.demo.dto.request.installmentPlan
 import java.time.LocalDate
 
 data class InstallmentPlanDTO (
-    val cartItemId: Long = 0,
-    val status: String = "PENDING",
-    val totalMonth: Int,
-    val startDate: LocalDate,
-    val endDate: LocalDate,
-    val installmentAmount: Double,
-    val lateFee: Double = 0.0,
+    val cartItemId: Long ?= null,
+    val status: String ?= null,
+    val totalMonth: Int ?= null,
+    val startDate: LocalDate ?= null,
+    val endDate: LocalDate ?= null,
+    val installmentAmount: Double ?= null,
+    val lateFee: Double ?= null,
 )

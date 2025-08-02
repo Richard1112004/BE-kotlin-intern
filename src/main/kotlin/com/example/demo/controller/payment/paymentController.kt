@@ -2,19 +2,23 @@ package com.example.demo.controller.payment
 
 import com.example.demo.dto.request.payment.PaymentDTO
 import com.example.demo.dto.respond.APIRespond
+import com.example.demo.model.InstallmentPayment
+import com.example.demo.service.payment.PaymentService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
 @RequestMapping("/api/v1/payment")
 @RestController
 @Tag(name = "Payment", description = "API for payment operations")
-class PaymentController {
+class PaymentController(private val paymentService: PaymentService) {
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all payments")
     @ApiResponses(value = [ApiResponse(
         responseCode = "200",
@@ -25,12 +29,13 @@ class PaymentController {
     )]
     )
     @GetMapping("/all")
-    fun getAllPayments(): ResponseEntity<APIRespond<Void>> {
+    fun getAllPayments(): ResponseEntity<APIRespond<List<InstallmentPayment>>> {
         try {
             // Simulate fetching all payments
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = paymentService.getAllPayments(),
                     message = "All payments retrieved successfully"
                 )
             )
@@ -44,6 +49,7 @@ class PaymentController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Post payment")
     @ApiResponses(value = [ApiResponse(
         responseCode = "200",
@@ -56,7 +62,7 @@ class PaymentController {
     @PostMapping
     fun postPayment(@RequestBody req: PaymentDTO): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate posting a payment
+            paymentService.addPayment(req)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
@@ -72,7 +78,7 @@ class PaymentController {
             )
         }
     }
-
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Edit payment")
     @ApiResponses(value = [ApiResponse(
         responseCode = "200",
@@ -82,10 +88,10 @@ class PaymentController {
         description = "Failed to edit payment"
     )]
     )
-    @PutMapping
-    fun editPayment(@RequestBody req: PaymentDTO): ResponseEntity<APIRespond<Void>> {
+    @PutMapping("/{id}")
+    fun editPayment(@RequestBody req: PaymentDTO, @PathVariable id: Long): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate editing a payment
+            paymentService.updatePayment(req, id)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
