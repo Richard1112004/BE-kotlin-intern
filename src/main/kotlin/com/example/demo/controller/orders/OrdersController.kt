@@ -3,19 +3,24 @@ package com.example.demo.controller.orders
 import com.example.demo.dto.request.order.OrderDTO
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.model.OrderModel
+import com.example.demo.service.order.OrderService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 
 @RequestMapping("/api/v1/orders")
 @RestController
 @Tag(name = "orders", description = "API for order operations")
-class OrdersController {
+class OrdersController (
+    private val orderService: OrderService
+) {
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all orders")
     @ApiResponses(
         value = [
@@ -30,6 +35,7 @@ class OrdersController {
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = orderService.getAllOrders(),
                     message = "All orders retrieved successfully"
                 )
             )
@@ -42,7 +48,7 @@ class OrdersController {
             )
         }
     }
-
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Post order ")
     @ApiResponses(
         value = [
@@ -53,7 +59,7 @@ class OrdersController {
     @PostMapping
     fun postOrder(@RequestBody order: OrderDTO): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate posting an order
+            orderService.createOrder(order)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,

@@ -23,12 +23,7 @@ data class OrderModel (
     @Column(nullable = false)
     val total : Double = 0.0,
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    val status: Status = Status.PENDING,
+    val status: String = "PENDING"
 
 )
-
-enum class Status {
-    PENDING, SHIPPED, DELIVERED, CANCELLED
-}
