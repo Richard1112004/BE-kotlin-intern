@@ -2,6 +2,8 @@ package com.example.demo.controller.installment
 
 import com.example.demo.dto.request.installmentPlan.InstallmentPlanDTO
 import com.example.demo.dto.respond.APIRespond
+import com.example.demo.model.InstallmentPlan
+import com.example.demo.service.installmentPlan.InstallmentService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/installment-plan")
 @RestController
 @Tag(name = "Installment-Plan", description = "API for installment plan operations")
-class InstallmentPlanController {
+class InstallmentPlanController (
+     private val installmentService: InstallmentService
+) {
     @Operation(summary = "Install Plan")
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Successfully installed plan"),
@@ -21,12 +25,13 @@ class InstallmentPlanController {
         ]
     )
     @GetMapping("/{planId}")
-    fun installPlan(@PathVariable planId: Int): ResponseEntity<APIRespond<Void>> {
+    fun installPlan(@PathVariable planId: Int): ResponseEntity<APIRespond<InstallmentPlan>> {
         try {
             // Simulate installing a plan
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = installmentService.getInstallmentPlanById(planId.toLong()),
                     message = "Installment plan installed successfully"
                 )
             )
@@ -49,7 +54,7 @@ class InstallmentPlanController {
     @PostMapping
     fun postInstallmentPlan(@RequestBody req: InstallmentPlanDTO): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate posting an installment plan
+            installmentService.addInstallmentPlan(req)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
@@ -72,9 +77,9 @@ class InstallmentPlanController {
         ApiResponse(responseCode = "400", description = "Bad request"),
     ])
     @PutMapping
-    fun editInstallmentPlan(@RequestBody req: InstallmentPlanDTO): ResponseEntity<APIRespond<Void>> {
+    fun editInstallmentPlan(@RequestBody req: InstallmentPlanDTO, @PathVariable id: Long): ResponseEntity<APIRespond<Void>> {
         try {
-            // Simulate editing an installment plan
+            installmentService.updateInstallmentPlan(req, id)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
