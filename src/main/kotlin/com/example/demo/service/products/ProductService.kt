@@ -22,6 +22,7 @@ class ProductService (
         val newProduct = ProductModel(
             name = product.name,
             description = product.description,
+            price = product.price,
             quantity = product.quality,
             image = product.images
         )

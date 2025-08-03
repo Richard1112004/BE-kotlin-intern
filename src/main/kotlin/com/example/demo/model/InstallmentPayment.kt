@@ -22,7 +22,7 @@ data class InstallmentPayment (
     val dueDate: java.time.LocalDate = java.time.LocalDate.now(),
 
     @Column(nullable = true)
-    val paidDate: java.time.LocalDate = java.time.LocalDate.now(),
+    val paidDate : java.time.LocalDate? = null,
 
     @Column(nullable = true)
     val status: String = "PENDING"

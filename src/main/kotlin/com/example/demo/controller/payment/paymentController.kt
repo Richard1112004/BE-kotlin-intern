@@ -60,12 +60,12 @@ class PaymentController(private val paymentService: PaymentService) {
     )]
     )
     @PostMapping
-    fun postPayment(@RequestBody req: PaymentDTO): ResponseEntity<APIRespond<Void>> {
+    fun postPayment(@RequestBody req: PaymentDTO): ResponseEntity<APIRespond<InstallmentPayment>> {
         try {
-            paymentService.addPayment(req)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = paymentService.addPayment(req),
                     message = "Payment posted successfully"
                 )
             )

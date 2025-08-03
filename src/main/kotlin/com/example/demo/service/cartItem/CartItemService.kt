@@ -27,7 +27,11 @@ class CartItemService (
             product = productRepo.findById(cartItem.productId!!).orElseThrow({ IllegalArgumentException("Product not found with id: ${cartItem.productId}") }),
             quantity = cartItem.quantity!!,
             term = cartItem.term?.toLong() ?: 0L,
-            order = orderRepo.findById(cartItem.orderId!!).orElseThrow({ IllegalArgumentException("Order not found with id: ${cartItem.orderId}") }),
+            order = if(cartItem.orderId!=null){
+                orderRepo.findById(cartItem.orderId).orElseThrow{ IllegalArgumentException("Order not found with id: ${cartItem.orderId}") }
+            }
+                    else null,
+
             user = userRepo.findById(cartItem.userId!!).orElseThrow({ IllegalArgumentException("User not found with id: ${cartItem.userId}") }),
             clear = cartItem.clear ?: false
         )

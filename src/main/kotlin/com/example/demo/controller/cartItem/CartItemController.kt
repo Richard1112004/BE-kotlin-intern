@@ -2,6 +2,7 @@ package com.example.demo.controller.cartItem
 
 import com.example.demo.dto.request.cartItem.CartItemDTO
 import com.example.demo.dto.respond.APIRespond
+import com.example.demo.model.CartItem
 import com.example.demo.service.cartItem.CartItemService
 import com.example.demo.service.user.UserService
 import io.swagger.v3.oas.annotations.Operation
@@ -30,12 +31,12 @@ class CartItemController(
         ]
     )
     @PostMapping
-    fun postCartItem(@RequestBody req: CartItemDTO): ResponseEntity<APIRespond<Void>> {
+    fun postCartItem(@RequestBody req: CartItemDTO): ResponseEntity<APIRespond<CartItem>> {
         try {
-            cartItemService.addCartItem(req)
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = cartItemService.addCartItem(req),
                     message = "Cart item added successfully"
                 )
             )
@@ -114,12 +115,13 @@ class CartItemController(
         ]
     )
     @GetMapping("/all")
-    fun getAllCartItems(): ResponseEntity<APIRespond<Void>> {
+    fun getAllCartItems(): ResponseEntity<APIRespond<List<CartItem>>> {
         try {
-            cartItemService.getAllCartItems()
+
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = cartItemService.getAllCartItems(),
                     message = "All cart items retrieved successfully"
                 )
             )

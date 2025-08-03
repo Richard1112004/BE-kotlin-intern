@@ -57,12 +57,13 @@ class OrdersController (
         ]
     )
     @PostMapping
-    fun postOrder(@RequestBody order: OrderDTO): ResponseEntity<APIRespond<Void>> {
+    fun postOrder(@RequestBody order: OrderDTO): ResponseEntity<APIRespond<OrderModel>> {
         try {
-            orderService.createOrder(order)
+
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = orderService.createOrder(order),
                     message = "Order posted successfully"
                 )
             )

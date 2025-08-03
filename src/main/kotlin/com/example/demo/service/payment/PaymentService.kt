@@ -27,7 +27,6 @@ class PaymentService (
             installmentPlan = installmentPlan.findById(payment.installmentId!!).orElseThrow({IllegalArgumentException("Payment not found with id: ${payment.installmentId}")}),
             amount = payment.amount!!,
             dueDate = payment.due_date!!,
-            paidDate = payment.paid_date!!,
             status = payment.status!!,
         )
         return paymentRepo.save(newPayment)

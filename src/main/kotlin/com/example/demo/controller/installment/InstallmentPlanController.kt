@@ -54,12 +54,13 @@ class InstallmentPlanController (
         ApiResponse(responseCode = "400", description = "Bad request"),
     ])
     @PostMapping
-    fun postInstallmentPlan(@RequestBody req: InstallmentPlanDTO): ResponseEntity<APIRespond<Void>> {
+    fun postInstallmentPlan(@RequestBody req: InstallmentPlanDTO): ResponseEntity<APIRespond<InstallmentPlan>> {
         try {
-            installmentService.addInstallmentPlan(req)
+
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
+                    data = installmentService.addInstallmentPlan(req),
                     message = "Installment plan posted successfully"
                 )
             )
