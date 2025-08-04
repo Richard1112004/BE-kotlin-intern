@@ -13,6 +13,10 @@ class PaymentService (
     private val paymentRepo: PaymentRepo,
     private val installmentPlan: InstallmentRepo,
 ) {
+    fun getPayment(id: Long): List<InstallmentPayment> {
+        return paymentRepo.findByInstallmentPlan_IdOrderByDueDateAsc(id);
+    }
+
     fun getAllPayments(): List<InstallmentPayment> {
         return paymentRepo.findAll()
     }

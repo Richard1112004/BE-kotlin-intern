@@ -99,4 +99,32 @@ class InstallmentPlanController (
         }
     }
 
+
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Get all install Plan")
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Successfully all installed plan"),
+        ApiResponse(responseCode = "400", description = "Bad request"),
+    ]
+    )
+    @GetMapping("/all")
+    fun getAllInstallPlan(): ResponseEntity<APIRespond<List<InstallmentPlan>>> {
+        try {
+            // Simulate installing a plan
+            return ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = installmentService.getAllInstallmentPlans(),
+                    message = "Installment plan installed successfully"
+                )
+            )
+        } catch (e: Exception) {
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to install plan: ${e.message ?: "Unknown error"}"
+                )
+            )
+        }
+    }
 }

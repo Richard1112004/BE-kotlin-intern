@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Payment", description = "API for payment operations")
 class PaymentController(private val paymentService: PaymentService) {
 
+
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get all payments")
     @ApiResponses(value = [ApiResponse(
@@ -108,5 +109,34 @@ class PaymentController(private val paymentService: PaymentService) {
         }
     }
 
+    @Operation(summary = "Get payment")
+    @ApiResponses(value = [ApiResponse(
+        responseCode = "200",
+        description = "Successfully retrieved payments"
+    ), ApiResponse(
+        responseCode = "400",
+        description = "Failed to retrieve payments"
+    )]
+    )
+    @GetMapping("/{installment_plan_id}")
+    fun getPayments(@PathVariable installment_plan_id: Long): ResponseEntity<APIRespond<List<InstallmentPayment>>> {
+        try {
+            // Simulate fetching all payments
+            return ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = paymentService.getPayment(installment_plan_id),
+                    message = "All payments retrieved successfully"
+                )
+            )
+        } catch (e: Exception) {
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to retrieve payments: ${e.message ?: "Unknown error"}"
+                )
+            )
+        }
+    }
 
 }
