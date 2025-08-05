@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
 interface NotificationRepo : JpaRepository<Notification, Long> {
+    fun findAllByUserId(userId: Long): List<Notification>
 
 }

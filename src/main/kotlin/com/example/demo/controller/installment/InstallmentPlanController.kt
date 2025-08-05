@@ -107,14 +107,14 @@ class InstallmentPlanController (
         ApiResponse(responseCode = "400", description = "Bad request"),
     ]
     )
-    @GetMapping("/all")
-    fun getAllInstallPlan(): ResponseEntity<APIRespond<List<InstallmentPlan>>> {
+    @GetMapping("/all/{user_id}")
+    fun getAllInstallPlan(@PathVariable user_id: Long): ResponseEntity<APIRespond<List<InstallmentPlan>>> {
         try {
             // Simulate installing a plan
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = installmentService.getAllInstallmentPlans(),
+                    data = installmentService.getAllInstallmentPlans(user_id),
                     message = "Installment plan installed successfully"
                 )
             )

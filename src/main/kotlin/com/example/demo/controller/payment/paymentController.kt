@@ -29,14 +29,14 @@ class PaymentController(private val paymentService: PaymentService) {
         description = "Failed to retrieve payments"
     )]
     )
-    @GetMapping("/all")
-    fun getAllPayments(): ResponseEntity<APIRespond<List<InstallmentPayment>>> {
+    @GetMapping("/all/{user_id}")
+    fun getAllPayments(@PathVariable user_id: Long): ResponseEntity<APIRespond<List<InstallmentPayment>>> {
         try {
             // Simulate fetching all payments
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = paymentService.getAllPayments(),
+                    data = paymentService.getAllPayments(user_id),
                     message = "All payments retrieved successfully"
                 )
             )

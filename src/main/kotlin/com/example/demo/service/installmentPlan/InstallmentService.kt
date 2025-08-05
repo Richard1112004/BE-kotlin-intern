@@ -12,8 +12,8 @@ class InstallmentService (
     private val installmentPlanRepo: InstallmentRepo,
     private val cartItemRepo: CartItemRepo,
 ) {
-    fun getAllInstallmentPlans(): List<InstallmentPlan> {
-        return installmentPlanRepo.findAll()
+    fun getAllInstallmentPlans(user_id: Long): List<InstallmentPlan> {
+        return installmentPlanRepo.findAllByUserId(user_id);
     }
 
     fun getInstallmentPlanById(id: Long): InstallmentPlan {

@@ -17,7 +17,7 @@ class PaymentService (
         return paymentRepo.findByInstallmentPlan_IdOrderByDueDateAsc(id);
     }
 
-    fun getAllPayments(): List<InstallmentPayment> {
+    fun getAllPayments(user_id: Long): List<InstallmentPayment> {
         return paymentRepo.findAll()
     }
 

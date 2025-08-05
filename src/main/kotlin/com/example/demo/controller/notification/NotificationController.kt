@@ -29,13 +29,13 @@ class NotificationController (
             ApiResponse(responseCode = "400", description = "Bad request"),
         ]
     )
-    @GetMapping
-    fun getAllNotifications(): ResponseEntity<APIRespond<List<Notification>>> {
+    @GetMapping("/{user_id}")
+    fun getAllNotifications(@PathVariable user_id: Long): ResponseEntity<APIRespond<List<Notification>>> {
         try {
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = notificationService.getAllNotification(),
+                    data = notificationService.getAllNotification(user_id),
                     message = "Successfully retrieved all notifications",
                 )
             )

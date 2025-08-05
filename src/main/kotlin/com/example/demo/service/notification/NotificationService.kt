@@ -13,8 +13,8 @@ class NotificationService (
     private val notificationRepo: NotificationRepo,
     private val userRepo: UserRepo
 ) {
-    fun getAllNotification(): List<Notification> {
-        return notificationRepo.findAll()
+    fun getAllNotification(user_id: Long): List<Notification> {
+        return notificationRepo.findAllByUserId(user_id);
     }
     fun updateNotificationReadStatus(id: Long, isRead: Boolean): Notification {
         val notification = notificationRepo.findById(id)
