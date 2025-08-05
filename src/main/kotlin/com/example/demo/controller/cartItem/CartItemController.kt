@@ -114,14 +114,14 @@ class CartItemController(
             ApiResponse(responseCode = "400", description = "Bad request"),
         ]
     )
-    @GetMapping("/all")
-    fun getAllCartItems(): ResponseEntity<APIRespond<List<CartItem>>> {
+    @GetMapping("/all/{userId}")
+    fun getAllCartItems(@PathVariable userId: Long): ResponseEntity<APIRespond<List<CartItem>>> {
         try {
 
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = cartItemService.getAllCartItems(),
+                    data = cartItemService.getAllCartItems(userId),
                     message = "All cart items retrieved successfully"
                 )
             )

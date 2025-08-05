@@ -18,8 +18,8 @@ class CartItemService (
 ) {
     // Add methods to handle cart item operations, e.g., add, update, delete, etc.
     // For example:
-    fun getAllCartItems(): List<CartItem> {
-        return cartItemRepo.findAll()
+    fun getAllCartItems(userId: Long): List<CartItem> {
+        return cartItemRepo.findAllByUserId(userId);
     }
 
     fun addCartItem(cartItem: CartItemDTO): CartItem {
