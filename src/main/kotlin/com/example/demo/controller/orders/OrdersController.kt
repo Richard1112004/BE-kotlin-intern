@@ -28,14 +28,14 @@ class OrdersController (
             ApiResponse(responseCode = "400", description = "Failed to retrieve orders"),
         ]
     )
-    @GetMapping("/all")
-    fun getAllOrders(): ResponseEntity<APIRespond<List<OrderModel>>> {
+    @GetMapping("/all/{userId}")
+    fun getAllOrders(@PathVariable userId: Long): ResponseEntity<APIRespond<List<OrderModel>>> {
         try {
             // Simulate fetching all orders
             return ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = orderService.getAllOrders(),
+                    data = orderService.getAllOrders(userId),
                     message = "All orders retrieved successfully"
                 )
             )

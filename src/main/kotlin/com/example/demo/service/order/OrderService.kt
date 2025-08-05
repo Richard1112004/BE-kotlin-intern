@@ -12,8 +12,8 @@ class OrderService (
     private val orderRepo: OrderRepo,
     private val userRepo: UserRepo
 ) {
-    fun getAllOrders(): List<OrderModel> {
-        return orderRepo.findAll()
+    fun getAllOrders(userId: Long): List<OrderModel> {
+        return orderRepo.findAllByUserId(userId);
     }
 
     fun getOrderById(id: Long): OrderModel {
