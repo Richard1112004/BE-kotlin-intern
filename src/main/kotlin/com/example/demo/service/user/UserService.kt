@@ -96,4 +96,19 @@ class UserService(
             3600000 // 1 hour
         )
     }
+
+    fun updateUserProfile(userProfileDTO: UserProfileDTO, id: Long): UserModel {
+        val existingUser = userRepo.findById(id)
+            .orElseThrow { IllegalArgumentException("User not found with id: $id") }
+
+        val updatedUser = existingUser.copy(
+            name = userProfileDTO.name ?: existingUser.name,
+            phone = userProfileDTO.phone ?: existingUser.phone,
+            province = userProfileDTO.province ?: existingUser.province,
+            street = userProfileDTO.street ?: existingUser.street
+        )
+
+        return userRepo.save(updatedUser)
+    }
+
 }

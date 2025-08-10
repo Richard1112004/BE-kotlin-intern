@@ -24,6 +24,6 @@ data class OrderModel (
     val total : Double = 0.0,
 
     @Column(nullable = false)
-    val status: String = "PENDING"
+    var status: String = "PENDING"
 
 )

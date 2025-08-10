@@ -2,6 +2,7 @@ package com.example.demo.controller.user
 
 import com.example.demo.dto.request.*
 import com.example.demo.dto.respond.APIRespond
+import com.example.demo.model.UserModel
 import com.example.demo.service.user.UserService
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.Operation
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -152,6 +154,41 @@ class UserController (
                 APIRespond(
                     status = 400,
                     message = "Register with Firebase failed: ${e.message ?: e::class.java.simpleName}"
+                )
+            )
+        }
+    }
+    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "update user profile",
+        description = "This endpoint allows users to update their profile information. " +
+                "The request body should contain the updated user information." +
+                "We will return the updated user information if the update is successful."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successfully updated user profile"),
+            ApiResponse(responseCode = "400", description = "Bad Request"),
+        ]
+    )
+    @PutMapping("/profile/{user_id}")
+    fun updateUserProfile(
+        @RequestBody req: UserProfileDTO, @PathVariable user_id: Long
+    ): ResponseEntity<APIRespond<UserModel>> {
+        try {
+            val updatedUser = userService.updateUserProfile(req, user_id)
+            return ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = updatedUser,
+                    message = "User profile updated successfully"
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to update user profile: ${e.message ?: e::class.java.simpleName}"
                 )
             )
         }

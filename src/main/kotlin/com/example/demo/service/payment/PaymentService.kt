@@ -18,7 +18,7 @@ class PaymentService (
     }
 
     fun getAllPayments(user_id: Long): List<InstallmentPayment> {
-        return paymentRepo.findAll()
+        return paymentRepo.findAllByUserId(user_id);
     }
 
     fun getPaymentById(id: Long): InstallmentPayment {
