@@ -16,7 +16,7 @@ class AdminLogin(
 ) :UserLoginStrategy {
 
     override fun login(req: LoginDTO): String {
-        val admin = userRepo.findByEmail(req.email) ?: throw Exception("Admin not found")
+        val admin = userRepo.findByEmail(req.email) ?: throw Exception("Admin not found i")
         jwtPasswordAuth.verifyOrThrow(req.password, admin.password)
         return jwtCreateToken.createJWT(
             admin.id.toString(),
