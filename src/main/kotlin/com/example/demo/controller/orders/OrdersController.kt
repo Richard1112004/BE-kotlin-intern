@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*
 class OrdersController (
     private val orderService: OrderService
 ) {
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @Operation(summary = "Get all orders")
     @ApiResponses(
         value = [
@@ -258,7 +258,7 @@ class OrdersController (
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @Operation(summary = "Get all products in order")
     @ApiResponses(
         value = [

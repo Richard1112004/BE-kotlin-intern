@@ -2,6 +2,7 @@ package com.example.demo.service.user
 
 import com.example.demo.component.JWTCreateToken
 import com.example.demo.dto.request.*
+import com.example.demo.dto.request.user.UserDTO
 import com.example.demo.repository.user.UserRepo
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
@@ -111,4 +112,12 @@ class UserService(
         return userRepo.save(updatedUser)
     }
 
+    fun getAllUsers(): List<UserDTO> {
+        return userRepo.findAllUserDTO();
+    }
+
+    fun getUserById(id: Long): UserModel {
+        return userRepo.findById(id)
+            .orElseThrow { IllegalArgumentException("User not found with id: $id") }
+    }
 }

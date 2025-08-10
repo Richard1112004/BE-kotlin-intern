@@ -1,6 +1,7 @@
 package com.example.demo.controller.user
 
 import com.example.demo.dto.request.*
+import com.example.demo.dto.request.user.UserDTO
 import com.example.demo.dto.respond.APIRespond
 import com.example.demo.model.UserModel
 import com.example.demo.service.user.UserService
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -193,4 +195,94 @@ class UserController (
             )
         }
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all users",)
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved all users"),
+            ApiResponse(responseCode = "400", description = "Bad Request"),
+        ]
+    )
+    @GetMapping("/all")
+    fun getAllUsers(): ResponseEntity<APIRespond<List<UserDTO>>> {
+        return try {
+            val users = userService.getAllUsers()
+            ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = users,
+                    message = "Successfully retrieved all users"
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to retrieve users: ${e.message ?: e::class.java.simpleName}"
+                )
+            )
+        }
+    }
+
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @Operation(summary = "Get order by user ID")
+//    @GetMapping("/{user_id}")
+//    fun getOrderByUserId(
+//        @PathVariable user_id: Long
+//    ): ResponseEntity<APIRespond<UserModel>> {
+//        return try {
+//            val user = userService.getUserById(user_id)
+//            ResponseEntity.ok(
+//                APIRespond(
+//                    status = 200,
+//                    data = user,
+//                    message = "Successfully retrieved user by ID"
+//                )
+//            )
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            ResponseEntity.status(400).body(
+//                APIRespond(
+//                    status = 400,
+//                    message = "Failed to retrieve user by ID: ${e.message ?: e::class.java.simpleName}"
+//                )
+//            )
+//        }
+//    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get user by ID",
+        description = "This endpoint allows admins to retrieve user information by user ID."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successfully retrieved user by ID"),
+            ApiResponse(responseCode = "400", description = "Bad Request"),
+        ]
+    )
+    @GetMapping("/{user_id}")
+    fun getUserById(
+        @PathVariable user_id: Long
+    ): ResponseEntity<APIRespond<UserModel>> {
+        return try {
+            val user = userService.getUserById(user_id)
+            ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = user,
+                    message = "Successfully retrieved user by ID"
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to retrieve user by ID: ${e.message ?: e::class.java.simpleName}"
+                )
+            )
+        }
+    }
+
 }
