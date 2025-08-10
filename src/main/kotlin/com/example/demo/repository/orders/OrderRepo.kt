@@ -19,11 +19,17 @@ interface OrderRepo : JpaRepository<OrderModel, Long> {
     fun findAllByUserId(userId: Long): List<OrderModel>
     fun countByCreatedAtBetween(start: LocalDateTime, end: LocalDateTime): Long
     @Query("""
-    SELECT new com.example.demo.dto.request.order.RecentDTO(o.id, u.email, o.status)
+    SELECT new com.example.demo.dto.request.order.RecentDTO(
+        o.id,
+        u.email,
+        o.status
+    )
     FROM OrderModel o
     JOIN o.user u
+    ORDER BY o.createdAt DESC, o.id DESC
 """)
     fun findOrdersWithUserDetails(pageable: Pageable): List<RecentDTO>
+
 
 
     @Query("""
@@ -61,9 +67,9 @@ interface OrderRepo : JpaRepository<OrderModel, Long> {
             p.quantity,
             p.image
         )
-        FROM ProductModel p
-        JOIN CartItem c ON p.id = c.product.id
-        JOIN OrderModel o ON c.order.id = o.id
+        FROM CartItem c
+        JOIN c.product p
+        JOIN c.order o
         WHERE o.id = :orderId
     """)
     fun findProductsByOrderId(orderId: Long): List<ProductDTO>

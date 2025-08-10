@@ -208,15 +208,15 @@ class OrdersController (
     fun changeOrderStatus(
         @PathVariable orderId: Long,
         @RequestParam status: String
-    ): ResponseEntity<APIRespond<OrderModel>> {
+    ): ResponseEntity<APIRespond<Void>> {
         return try {
+            orderService.updateOrderStatus(
+                orderId = orderId,
+                status = status
+            );
             ResponseEntity.ok(
                 APIRespond(
                     status = 200,
-                    data = orderService.updateOrderStatus(
-                        orderId = orderId,
-                        status = status
-                    ),
                     message = "Order status changed successfully"
                 )
             )
