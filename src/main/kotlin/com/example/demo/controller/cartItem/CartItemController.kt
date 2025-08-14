@@ -23,7 +23,13 @@ class CartItemController(
 ) {
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Post new cart items")
+    @Operation(summary = "Post new cart items",
+        description = "This endpoint allows authenticated users to add new items to their shopping cart. " +
+                "The request body should contain cart item information including product ID, quantity, " +
+                "and any specific product options or variations. Only users with USER role can access this endpoint. " +
+                "The system validates product availability and user permissions before adding the item. " +
+                "This is essential for the e-commerce shopping experience and order preparation."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully added cart item"),
@@ -51,7 +57,13 @@ class CartItemController(
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Update cart items")
+    @Operation(summary = "Update cart items",
+        description = "This endpoint allows authenticated users to modify existing items in their shopping cart. " +
+                "The request requires a valid cart item ID as a path parameter and updated item information in the request body. " +
+                "Users can update quantities, product options, or other cart item attributes. " +
+                "Only users with USER role can access this endpoint, and they can only modify their own cart items. " +
+                "This functionality is crucial for allowing customers to adjust their orders before checkout."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully updated cart item"),
@@ -79,7 +91,13 @@ class CartItemController(
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Delete cart items")
+    @Operation(summary = "Delete cart items",
+        description = "This endpoint allows authenticated users to remove specific items from their shopping cart. " +
+                "The request requires a valid cart item ID as a path parameter to identify which item to delete. " +
+                "Only users with USER role can access this endpoint, and they can only delete their own cart items. " +
+                "Once deleted, the item is permanently removed from the cart and cannot be recovered. " +
+                "This functionality helps users manage their cart contents and remove unwanted items before checkout."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully deleted cart item"),
@@ -107,7 +125,14 @@ class CartItemController(
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all cart items")
+    @Operation(summary = "Get all cart items",
+        description = "This endpoint retrieves all items currently in a specific user's shopping cart. " +
+                "The request requires a valid user ID as a path parameter to identify whose cart to retrieve. " +
+                "Only users with USER role can access this endpoint, ensuring cart privacy and security. " +
+                "The response includes detailed information about each cart item including product details, " +
+                "quantities, prices, and total values. This endpoint is essential for displaying cart contents " +
+                "and calculating order totals before checkout."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved cart items"),

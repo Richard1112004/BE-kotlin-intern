@@ -20,7 +20,13 @@ class InstallmentPlanController (
      private val installmentService: InstallmentService
 ) {
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Install Plan")
+    @Operation(summary = "Install Plan",
+        description = "This endpoint allows authenticated users to retrieve details of a specific installment plan by its ID. " +
+                "The request requires a valid plan ID as a path parameter. Only users with USER role can access this endpoint. " +
+                "The response includes comprehensive installment plan information such as payment schedule, interest rates, " +
+                "duration, monthly payment amounts, and terms and conditions. This endpoint is typically used when users " +
+                "want to view installment plan details before making a purchase decision or during the checkout process."
+    )
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Successfully installed plan"),
         ApiResponse(responseCode = "400", description = "Bad request"),
@@ -48,7 +54,14 @@ class InstallmentPlanController (
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Post installment plans")
+    @Operation(summary = "Post installment plans",
+        description = "This endpoint allows authenticated users to create and submit new installment plans. " +
+                "The request body should contain complete installment plan information including payment terms, " +
+                "duration, interest rates, payment schedule, and associated product or order details. " +
+                "Only users with USER role can access this endpoint. Upon successful creation, the installment plan " +
+                "is registered in the system and becomes available for payment processing. This endpoint is essential " +
+                "for setting up flexible payment options and managing installment-based purchases."
+    )
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Successfully posted installment plan"),
         ApiResponse(responseCode = "400", description = "Bad request"),
@@ -74,7 +87,13 @@ class InstallmentPlanController (
         }
     }
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Edit installment plans")
+    @Operation(summary = "Edit installment plans",
+        description = "This endpoint allows authenticated users to modify existing installment plan details. " +
+                "The request requires a valid installment plan ID as a path parameter and updated plan information in the request body. " +
+                "Only users with USER role can access this endpoint, and typically they can only edit their own installment plans. " +
+                "Users can update payment schedules, modify terms, or adjust plan details as needed. " +
+                "This functionality is important for managing installment agreements and accommodating changes in payment preferences."
+    )
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Successfully edit installment plans"),
         ApiResponse(responseCode = "400", description = "Bad request"),
@@ -101,7 +120,14 @@ class InstallmentPlanController (
 
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all install Plan")
+    @Operation(summary = "Get all install Plan",
+        description = "This endpoint retrieves all installment plans associated with a specific user. " +
+                "The request requires a valid user ID as a path parameter to identify whose installment plans to retrieve. " +
+                "Only users with USER role can access this endpoint, ensuring installment plan privacy and security. " +
+                "The response includes comprehensive information about all user's installment plans including payment status, " +
+                "remaining balances, payment schedules, and plan details. This endpoint is essential for users to manage " +
+                "their installment commitments and track payment progress across multiple plans."
+    )
     @ApiResponses(value = [
         ApiResponse(responseCode = "200", description = "Successfully all installed plan"),
         ApiResponse(responseCode = "400", description = "Bad request"),

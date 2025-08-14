@@ -21,7 +21,14 @@ import org.springframework.web.bind.annotation.RestController
 class AdminController (
     private val adminService: AdminService
 ) {
-    @Operation(summary = "Register admins")
+    @Operation(summary = "Register admins",
+        description = "This endpoint allows the registration of new administrator accounts in the system. " +
+                "The request body should contain admin registration information including username, email, " +
+                "password, and any additional admin-specific details. This endpoint creates a new admin account " +
+                "with elevated privileges and ADMIN role permissions. Access to this endpoint should be " +
+                "carefully controlled as it grants administrative access to the system. " +
+                "Upon successful registration, the new admin can use the admin login endpoint to access the system."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully registered admin"),

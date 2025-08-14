@@ -22,7 +22,13 @@ import org.springframework.web.bind.annotation.RestController
 class ProductController (
     private val productService: ProductService
 ) {
-    @Operation(summary = "Get product details")
+    @Operation(summary = "Get product details",
+        description = "This endpoint retrieves detailed information about a specific product using its unique identifier. " +
+                "The request requires a valid product ID as a path parameter. " +
+                "The response includes comprehensive product information such as name, description, price, " +
+                "availability status, specifications, and other relevant product attributes. " +
+                "This endpoint is commonly used for product detail pages and inventory management."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved product details"),
@@ -52,7 +58,13 @@ class ProductController (
     }
 
 
-    @Operation(summary = "Get all products")
+    @Operation(summary = "Get all products",
+        description = "This endpoint retrieves a comprehensive list of all available products in the system. " +
+                "No authentication is required for this public endpoint, making it suitable for product catalogs " +
+                "and browsing functionality. The response includes basic product information for each item " +
+                "such as ID, name, price, and availability status. This endpoint is typically used for " +
+                "product listing pages, search results, and inventory overviews."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved all products"),
@@ -80,7 +92,14 @@ class ProductController (
         }
     }
 
-    @Operation(summary = "Create new product")
+    @Operation(summary = "Create new product",
+        description = "This endpoint allows the creation of a new product in the system. " +
+                "The request body should contain complete product information including name, description, " +
+                "price, category, specifications, and other relevant product attributes. " +
+                "Upon successful creation, the product becomes available in the system catalog. " +
+                "This endpoint is typically used by administrators or authorized users for inventory management " +
+                "and product catalog maintenance."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Successfully created product"),

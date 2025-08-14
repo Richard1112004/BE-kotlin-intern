@@ -22,7 +22,13 @@ class NotificationController (
 ){
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Get all notifications")
+    @Operation(summary = "Get all notifications",
+        description = "This endpoint retrieves all notifications for a specific user identified by their user ID. " +
+                "The request requires a valid user ID as a path parameter. Only users with USER role can access this endpoint, " +
+                "ensuring notification privacy and security. The response includes all notification details such as " +
+                "message content, timestamp, read status, notification type, and related information. " +
+                "This endpoint is essential for displaying user notifications, alerts, and system messages in the application."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Successfully retrieved all notifications"),
@@ -51,7 +57,13 @@ class NotificationController (
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Create a notification")
+    @Operation(summary = "Create a notification",
+        description = "This endpoint allows authenticated users to create and send new notifications within the system. " +
+                "The request body should contain notification details including recipient information, message content, " +
+                "notification type, and any relevant metadata. Only users with USER role can access this endpoint. " +
+                "Upon successful creation, the notification is stored in the system and delivered to the intended recipient. " +
+                "This functionality supports communication features, alerts, and system-generated notifications."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Notification created successfully"),
@@ -81,7 +93,13 @@ class NotificationController (
     }
 
     @PreAuthorize("hasRole('USER')")
-    @Operation(summary = "Update a notification")
+    @Operation(summary = "Update a notification",
+        description = "This endpoint allows authenticated users to modify existing notifications, particularly to update the read status. " +
+                "The request requires a valid notification ID as a path parameter and updated notification data in the request body. " +
+                "Only users with USER role can access this endpoint, and typically they can only update their own notifications. " +
+                "The most common use case is marking notifications as read or unread, which helps manage notification states " +
+                "and provides better user experience for notification management."
+    )
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Notification updated successfully"),

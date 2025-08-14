@@ -21,9 +21,11 @@ class AuthController (
     private val authService: AuthService,
     ) {
     @Operation(summary = "Login user",
-        description = "This endpoint allows users to log in. " +
-                "The request body should contain the user's login credentials." +
-        "We will return a JWT token if the login is successful."
+        description = "This endpoint allows regular users to authenticate and log into the system. " +
+                "The request body should contain valid user credentials including email/username and password. " +
+                "Upon successful authentication, the system validates the credentials against the user database " +
+                "and returns a JWT token that can be used for subsequent authenticated requests. " +
+                "This token contains user information and permissions for the USER role."
     )
     @ApiResponses(
         value = [
@@ -53,9 +55,11 @@ class AuthController (
     }
 
     @Operation(summary = "Login admin",
-        description = "This endpoint allows admins to log in. " +
-                "The request body should contain the admin's login credentials." +
-        "We will return a JWT token if the login is successful."
+        description = "This endpoint allows administrators to authenticate and log into the system with elevated privileges. " +
+                "The request body should contain valid admin credentials including email/username and password. " +
+                "Upon successful authentication, the system validates the admin credentials against the admin database " +
+                "and returns a JWT token with ADMIN role permissions. This token provides access to administrative " +
+                "functions and management operations that regular users cannot access."
     )
     @ApiResponses(
         value = [
