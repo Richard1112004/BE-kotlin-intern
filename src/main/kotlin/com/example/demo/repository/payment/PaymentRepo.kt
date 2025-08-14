@@ -16,4 +16,12 @@ interface PaymentRepo : JpaRepository<InstallmentPayment, Long> {
         """)
 
     fun findAllByUserId(@Param("userId") userId: Long): List<InstallmentPayment>
+
+    @Query("""
+        SELECT p from InstallmentPayment p
+        JOIN InstallmentPlan ip ON p.installmentPlan.id = ip.id
+        JOIN CartItem ci ON ip.cartItem.id = ci.id
+        WHERE ci.product.id = :productId
+        """)
+    fun findByProductId(@Param("productId") productId: Long): List<InstallmentPayment>
 }

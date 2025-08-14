@@ -139,4 +139,35 @@ class PaymentController(private val paymentService: PaymentService) {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get payment by product ID")
+    @ApiResponses(value = [ApiResponse(
+        responseCode = "200",
+        description = "Successfully retrieved payment by product ID"
+    ), ApiResponse(
+        responseCode = "400",
+        description = "Failed to retrieve payment by product ID"
+    )]
+    )
+    @GetMapping("/product/{product_id}")
+    fun getPaymentByProductId(@PathVariable product_id: Long): ResponseEntity<APIRespond<List<InstallmentPayment>>> {
+        try {
+            // Simulate fetching payments by product ID
+            return ResponseEntity.ok(
+                APIRespond(
+                    status = 200,
+                    data = paymentService.getPaymentByProductId(product_id),
+                    message = "Payments retrieved successfully for product ID: $product_id"
+                )
+            )
+        } catch (e: Exception) {
+            return ResponseEntity.status(400).body(
+                APIRespond(
+                    status = 400,
+                    message = "Failed to retrieve payments by product ID: ${e.message ?: "Unknown error"}"
+                )
+            )
+        }
+    }
+
 }

@@ -60,17 +60,20 @@ interface OrderRepo : JpaRepository<OrderModel, Long> {
     fun findOrderFullInfoById(orderId: Long): OrderDetailDTO
 
     @Query("""
-        SELECT new com.example.demo.dto.request.product.ProductDTO(
-            p.name,
-            p.description,
-            p.price,
-            p.quantity,
-            p.image
-        )
-        FROM CartItem c
-        JOIN c.product p
-        JOIN c.order o
-        WHERE o.id = :orderId
-    """)
+    SELECT new com.example.demo.dto.request.product.ProductDTO(
+        p.name,
+        p.description,
+        p.price,
+        p.quantity,
+        p.image,
+        i.id
+    )
+    FROM CartItem c
+    JOIN c.order o
+    JOIN c.product p
+    JOIN InstallmentPlan i ON i.cartItem.id = c.id
+    WHERE o.id = :orderId
+""")
+
     fun findProductsByOrderId(orderId: Long): List<ProductDTO>
 }

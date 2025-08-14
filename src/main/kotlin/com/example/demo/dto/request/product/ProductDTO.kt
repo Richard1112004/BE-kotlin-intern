@@ -6,4 +6,5 @@ data class ProductDTO (
     val price: Double,
     val quality: Long = 0,
     val images: String = "",
+    val installmentId: Long? = null,
 )

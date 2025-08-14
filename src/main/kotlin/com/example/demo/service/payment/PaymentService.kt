@@ -52,5 +52,8 @@ class PaymentService (
 
         return paymentRepo.save(updatedPayment)
     }
-
+    fun getPaymentByProductId(productId: Long): List<InstallmentPayment> {
+        return paymentRepo.findByProductId(productId)
+            .ifEmpty { throw IllegalArgumentException("No payments found for product with id: $productId") }
+    }
 }
